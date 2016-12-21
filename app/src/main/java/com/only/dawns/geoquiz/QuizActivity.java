@@ -12,6 +12,7 @@ public class QuizActivity extends AppCompatActivity {
     private Button mTrueButton;
     private Button mFalseButton;
     private Button mNextButton;
+    private Button mPrevButton;
     private TextView mQuestionTextView;
 
     private Question[] mQuestionBank = new Question[]{
@@ -79,6 +80,20 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //通过取模操作使不断自增的mCurrentIndex始终无限循环在既有数组内容中
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+                updateQuestion();
+            }
+        });
+
+        mPrevButton = (Button) findViewById(R.id.prev_button);
+        mPrevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //当mCurrentIndex为0时java计算-1%5=-1
+                //当mCurrentIndex小于等于0时将值设为mQuestionBank.length
+                //这样再减1取模之后mCurrentIndex就始终为数组的最后一个下标
+                if(mCurrentIndex<=0)
+                    mCurrentIndex=mQuestionBank.length;
+                mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                 updateQuestion();
             }
         });
