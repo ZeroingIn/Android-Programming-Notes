@@ -1,10 +1,11 @@
 package com.only.dawns.geoquiz;
 
 /**
- * Created by Dawns on 2016/12/21.
+ * Created by X on 2016/12/21.
+ * good
  */
 
-public class Question {
+class Question {
     private int mTextResId;
     private boolean mAnswerTrue;
 
