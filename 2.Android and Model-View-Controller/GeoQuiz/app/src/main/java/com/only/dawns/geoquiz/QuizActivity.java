@@ -20,42 +20,42 @@ public class QuizActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_CHEAT = 0;
 
     private final Question[] mQuestionBank = new Question[]{
-            new Question(R.string.question_oceans,true),
-            new Question(R.string.question_mideast,false),
-            new Question(R.string.question_africa,false),
-            new Question(R.string.question_americas,true),
-            new Question(R.string.question_asia,true),
+            new Question(R.string.question_oceans, true),
+            new Question(R.string.question_mideast, false),
+            new Question(R.string.question_africa, false),
+            new Question(R.string.question_americas, true),
+            new Question(R.string.question_asia, true),
     };
 
     private int mCurrentIndex = 0;
-    private static final String IS_CHEATER= "isCheater";
-    private boolean[] mIsCheater=new boolean[]{false,false,false,false,false};
+    private static final String IS_CHEATER = "isCheater";
+    private boolean[] mIsCheater = new boolean[]{false, false, false, false, false};
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode != Activity.RESULT_OK)
+        if (resultCode != Activity.RESULT_OK)
             return;
 
-        if(requestCode == REQUEST_CODE_CHEAT) {
+        if (requestCode == REQUEST_CODE_CHEAT) {
             if (data == null)
                 return;
             mIsCheater[mCurrentIndex] = CheatActivity.wasAnswerShown(data);
         }
     }
 
-    private void updateQuestion(){
+    private void updateQuestion() {
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
     }
 
-    private void checkAnswer(boolean userPressedTrue){
+    private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
 
         int messageResId;
 
-        if(mIsCheater[mCurrentIndex]){
+        if (mIsCheater[mCurrentIndex]) {
             messageResId = R.string.judgment_toast;
-        }else {
+        } else {
             if (userPressedTrue == answerIsTrue) {
                 messageResId = R.string.correct_toast;
             } else {
@@ -69,21 +69,21 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.i(TAG,"onSaveInstanceState");
+        Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-        savedInstanceState.putBooleanArray(IS_CHEATER,mIsCheater);
+        savedInstanceState.putBooleanArray(IS_CHEATER, mIsCheater);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG,"onCreate(Bundle) called");
+        Log.d(TAG, "onCreate(Bundle) called");
         setContentView(R.layout.activity_quiz);
 
         //第一次启动应用时没有保存状态故需判断
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-            mIsCheater=savedInstanceState.getBooleanArray(IS_CHEATER);
+            mIsCheater = savedInstanceState.getBooleanArray(IS_CHEATER);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -97,14 +97,14 @@ public class QuizActivity extends AppCompatActivity {
         updateQuestion();
 
         Button trueButton = (Button) findViewById(R.id.true_button);
-        trueButton.setOnClickListener(new View.OnClickListener(){
+        trueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkAnswer(true);
             }
         });
         Button falseButton = (Button) findViewById(R.id.false_button);
-        falseButton.setOnClickListener(new View.OnClickListener(){
+        falseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 checkAnswer(false);
@@ -128,8 +128,8 @@ public class QuizActivity extends AppCompatActivity {
                 //当mCurrentIndex为0时java计算-1%5=-1
                 //当mCurrentIndex小于等于0时将值设为mQuestionBank.length
                 //这样再减1取模之后mCurrentIndex就始终为数组的最后一个下标
-                if(mCurrentIndex<=0)
-                    mCurrentIndex=mQuestionBank.length;
+                if (mCurrentIndex <= 0)
+                    mCurrentIndex = mQuestionBank.length;
                 mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                 updateQuestion();
             }
@@ -140,8 +140,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-                Intent i = CheatActivity.newIntent(QuizActivity.this,answerIsTrue);
-                startActivityForResult(i,REQUEST_CODE_CHEAT);
+                Intent i = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
+                startActivityForResult(i, REQUEST_CODE_CHEAT);
             }
         });
     }
@@ -149,30 +149,30 @@ public class QuizActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        Log.d(TAG,"onStart() called");
+        Log.d(TAG, "onStart() called");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.d(TAG,"onPause() called");
+        Log.d(TAG, "onPause() called");
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG,"onResume() called");
+        Log.d(TAG, "onResume() called");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG,"onStop() called");
+        Log.d(TAG, "onStop() called");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"onDestroy() called");
+        Log.d(TAG, "onDestroy() called");
     }
 }

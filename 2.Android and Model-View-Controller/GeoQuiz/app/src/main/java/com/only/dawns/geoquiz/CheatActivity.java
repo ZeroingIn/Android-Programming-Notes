@@ -17,6 +17,7 @@ import android.widget.TextView;
 public class CheatActivity extends AppCompatActivity {
 
     private TextView mAnswerTextView;
+    private TextView mApiLevelTextView;
 
     private static final String EXTRA_ANSWER_IS_TRUE = "com.only.dawns.geoquiz.answer_is_true";
     private static final String EXTRA_ANSWER_SHOWN = "com.only.dawns.geoquiz.answer_shown";
@@ -66,6 +67,8 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
+        mApiLevelTextView = (TextView) findViewById(R.id.api_text_view);
+        mApiLevelTextView.setText("API Level " + Build.VERSION.SDK_INT);
         final Button showAnswer = (Button) findViewById(R.id.showAnswerButton);
         showAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
