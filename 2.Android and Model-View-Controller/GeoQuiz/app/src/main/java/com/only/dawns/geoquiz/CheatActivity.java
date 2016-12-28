@@ -1,11 +1,16 @@
 package com.only.dawns.geoquiz;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -61,7 +66,7 @@ public class CheatActivity extends AppCompatActivity {
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
 
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);
-        Button showAnswer = (Button) findViewById(R.id.showAnswerButton);
+        final Button showAnswer = (Button) findViewById(R.id.showAnswerButton);
         showAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,6 +75,23 @@ public class CheatActivity extends AppCompatActivity {
                 else
                     mAnswerTextView.setText(R.string.false_button);
                 setAnswerShownResult(true);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    //在API21级以上才会显示动画效果
+                    int cx = showAnswer.getWidth() / 2;
+                    int cy = showAnswer.getHeight() / 2;
+                    float radius = showAnswer.getWidth();
+                    Animator anim = ViewAnimationUtils.createCircularReveal(showAnswer, cx, cy, radius, 0);
+                    anim.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            showAnswer.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    anim.start();
+                } else
+                    showAnswer.setVisibility(View.INVISIBLE);
             }
         });
     }
