@@ -29,7 +29,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
     private static final String IS_CHEATER= "isCheater";
-    private boolean mIsCheater;
+    private boolean[] mIsCheater=new boolean[]{false,false,false,false,false};
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -39,7 +39,7 @@ public class QuizActivity extends AppCompatActivity {
         if(requestCode == REQUEST_CODE_CHEAT) {
             if (data == null)
                 return;
-            mIsCheater = CheatActivity.wasAnswerShown(data);
+            mIsCheater[mCurrentIndex] = CheatActivity.wasAnswerShown(data);
         }
     }
 
@@ -53,7 +53,7 @@ public class QuizActivity extends AppCompatActivity {
 
         int messageResId;
 
-        if(mIsCheater){
+        if(mIsCheater[mCurrentIndex]){
             messageResId = R.string.judgment_toast;
         }else {
             if (userPressedTrue == answerIsTrue) {
@@ -71,7 +71,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG,"onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
-        savedInstanceState.putBoolean(IS_CHEATER,mIsCheater);
+        savedInstanceState.putBooleanArray(IS_CHEATER,mIsCheater);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class QuizActivity extends AppCompatActivity {
         //第一次启动应用时没有保存状态故需判断
         if(savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
-            mIsCheater=savedInstanceState.getBoolean(IS_CHEATER,false);
+            mIsCheater=savedInstanceState.getBooleanArray(IS_CHEATER);
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -117,7 +117,6 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //通过取模操作使不断自增的mCurrentIndex始终无限循环在既有数组内容中
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                mIsCheater = false;
                 updateQuestion();
             }
         });
@@ -132,7 +131,6 @@ public class QuizActivity extends AppCompatActivity {
                 if(mCurrentIndex<=0)
                     mCurrentIndex=mQuestionBank.length;
                 mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
-                mIsCheater = false;
                 updateQuestion();
             }
         });
