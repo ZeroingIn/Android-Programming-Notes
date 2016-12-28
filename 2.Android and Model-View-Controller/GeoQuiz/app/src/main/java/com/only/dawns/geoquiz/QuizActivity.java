@@ -28,6 +28,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex = 0;
+    private static final String IS_CHEATER= "isCheater";
     private boolean mIsCheater;
 
     @Override
@@ -70,6 +71,7 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG,"onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean(IS_CHEATER,mIsCheater);
     }
 
     @Override
@@ -79,8 +81,10 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         //第一次启动应用时没有保存状态故需判断
-        if(savedInstanceState != null)
-            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX,0);
+        if(savedInstanceState != null) {
+            mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mIsCheater=savedInstanceState.getBoolean(IS_CHEATER,false);
+        }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
         mQuestionTextView.setOnClickListener(new View.OnClickListener() {
